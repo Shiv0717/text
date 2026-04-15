@@ -1,206 +1,354 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 
-const students = [
-  {
-    name: "Anna Argemí",
-    programme: "Màster en Química Analítica",
-    image: "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=400&h=560&fit=crop&crop=face",
-  },
-  {
-    name: "Agustín Guerequiz",
-    programme: "Màster en Gestió en Patrimonial y Financiera",
-    image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=560&fit=crop&crop=face",
-  },
-  {
-    name: "Arnau Llaugé",
-    programme: "Màster en Gestió Patrimonial y Financiera",
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=560&fit=crop&crop=face",
-  },
-  {
-    name: "Laura Sánchez",
-    programme: "Màster en Enginyeria Química",
-    image: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=400&h=560&fit=crop&crop=face",
-  },
-  {
-    name: "Marc Puigdomènech",
-    programme: "Màster en Direcció d'Empreses",
-    image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=560&fit=crop&crop=face",
-  },
+const companies = [
+  { name: "Google",     hq: "Mountain View", color: "#4285F4", domain: "google.com" },
+  { name: "Apple",      hq: "Cupertino",     color: "#555555", domain: "apple.com" },
+  { name: "Microsoft",  hq: "Redmond",       color: "#00A4EF", domain: "microsoft.com" },
+  { name: "Amazon",     hq: "Seattle",       color: "#FF9900", domain: "amazon.com" },
+  { name: "Meta",       hq: "Menlo Park",    color: "#0082FB", domain: "meta.com" },
+  { name: "Accenture",  hq: "Dublin",        color: "#A100FF", domain: "accenture.com" },
+  { name: "Infosys",    hq: "Bengaluru",     color: "#007CC3", domain: "infosys.com" },
+  { name: "TCS",        hq: "Mumbai",        color: "#CC0000", domain: "tcs.com" },
+  { name: "Wipro",      hq: "Bengaluru",     color: "#341C5C", domain: "wipro.com" },
+  { name: "IBM",        hq: "Armonk",        color: "#1F70C1", domain: "ibm.com" },
+  { name: "Oracle",     hq: "Austin",        color: "#C74634", domain: "oracle.com" },
+  { name: "Samsung",    hq: "Seoul",         color: "#1428A0", domain: "samsung.com" },
 ];
 
-export default function IQSStudentsSection() {
-  const scrollRef = useRef(null);
-  const [canScrollLeft, setCanScrollLeft] = useState(false);
-  const [canScrollRight, setCanScrollRight] = useState(true);
+const rows = [
+  companies.slice(0, 5),
+  companies.slice(5, 9),
+  companies.slice(9, 12),
+];
 
-  const updateScrollState = () => {
-    const el = scrollRef.current;
-    if (!el) return;
-    setCanScrollLeft(el.scrollLeft > 10);
-    setCanScrollRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 10);
-  };
-
-  const scroll = (dir) => {
-    const el = scrollRef.current;
-    if (!el) return;
-    el.scrollBy({ left: dir === "right" ? 320 : -320, behavior: "smooth" });
-    setTimeout(updateScrollState, 350);
-  };
+export default function RecruitmentLogos() {
+  const [hovered, setHovered] = useState(null);
 
   return (
-    <section className="bg-[#f0f0ee] py-20 overflow-hidden">
-      <div className="max-w-[1400px] mx-auto px-8 lg:px-16">
-        <div className="flex flex-col lg:flex-row gap-12 lg:gap-20">
+    <section>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500&display=swap');
 
-          {/* Left: Text block */}
-          <div className="lg:w-[340px] flex-shrink-0 flex flex-col justify-center">
-            {/* Label */}
-            <div className="flex items-center gap-2 mb-5">
-              {/* IQS chevron icon */}
-              <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-                <path d="M2 14L9 4L16 14" stroke="#22c55e" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
-              </svg>
-              <span
-                className="text-sm font-semibold tracking-wide text-[#1a1a3a]"
-                style={{ fontFamily: "'Georgia', serif" }}
-              >
-                IQS Experiences
-              </span>
+        :root {
+          --bg: #F7F4EF;
+          --ink: #1C1917;
+          --muted: #A8A39B;
+          --rule: #E2DDD6;
+          --warm: #EDE8E0;
+        }
+
+        .rp-wrap {
+          background: var(--bg);
+          padding: 100px 48px 80px;
+          overflow: hidden;
+          position: relative;
+        }
+
+        /* Subtle noise texture overlay */
+        .rp-wrap::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+          pointer-events: none;
+          opacity: 0.4;
+        }
+
+        .rp-inner {
+          max-width: 1020px;
+          margin: 0 auto;
+          position: relative;
+        }
+
+        /* Header */
+        .rp-header {
+          display: flex;
+          align-items: flex-end;
+          justify-content: space-between;
+          margin-bottom: 64px;
+          padding-bottom: 28px;
+          border-bottom: 1px solid var(--rule);
+        }
+
+        .rp-title-block {}
+
+        .rp-label {
+          font-family: 'Outfit', sans-serif;
+          font-size: 10px;
+          font-weight: 500;
+          letter-spacing: 0.22em;
+          text-transform: uppercase;
+          color: var(--muted);
+          margin-bottom: 10px;
+        }
+
+        .rp-title {
+          font-family: 'Cormorant Garamond', serif;
+          font-size: clamp(36px, 5vw, 58px);
+          font-weight: 300;
+          color: var(--ink);
+          line-height: 1;
+          letter-spacing: -0.02em;
+        }
+
+        .rp-title em {
+          font-style: italic;
+          font-weight: 400;
+          color: var(--muted);
+        }
+
+        .rp-stat {
+          text-align: right;
+        }
+
+        .rp-stat-num {
+          font-family: 'Cormorant Garamond', serif;
+          font-size: 80px;
+          font-weight: 300;
+          color: var(--rule);
+          line-height: 1;
+          letter-spacing: -0.05em;
+          display: block;
+        }
+
+        .rp-stat-label {
+          font-family: 'Outfit', sans-serif;
+          font-size: 9px;
+          font-weight: 400;
+          letter-spacing: 0.18em;
+          text-transform: uppercase;
+          color: var(--muted);
+        }
+
+        /* Pyramid grid */
+        .rp-pyramid {
+          display: flex;
+          flex-direction: column;
+          gap: 0;
+        }
+
+        .rp-row {
+          display: flex;
+          justify-content: center;
+          border-top: 1px solid var(--rule);
+        }
+
+        .rp-pyramid .rp-row:last-child {
+          border-bottom: 1px solid var(--rule);
+        }
+
+        .rp-cell {
+          flex: 1;
+          padding: 32px 24px 28px;
+          border-right: 1px solid var(--rule);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          cursor: default;
+          position: relative;
+          overflow: hidden;
+          transition: background 0.35s ease;
+        }
+
+        .rp-cell:first-child {
+          border-left: 1px solid var(--rule);
+        }
+
+        /* Accent bar at top of cell */
+        .rp-cell-bar {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 2px;
+          transform: scaleX(0);
+          transform-origin: left;
+          transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .rp-cell:hover .rp-cell-bar {
+          transform: scaleX(1);
+        }
+
+        .rp-cell:hover {
+          background: var(--warm);
+        }
+
+        .rp-cell-idx {
+          font-family: 'Outfit', sans-serif;
+          font-size: 9px;
+          font-weight: 400;
+          color: var(--rule);
+          letter-spacing: 0.1em;
+          transition: color 0.2s ease;
+          align-self: flex-end;
+          position: absolute;
+          top: 14px;
+          right: 16px;
+        }
+
+        .rp-cell:hover .rp-cell-idx {
+          color: var(--muted);
+        }
+
+        .rp-cell-logo {
+          width: 32px;
+          height: 32px;
+          object-fit: contain;
+          opacity: 0.75;
+          transition: opacity 0.2s ease, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+          filter: grayscale(30%);
+        }
+
+        .rp-cell:hover .rp-cell-logo {
+          opacity: 1;
+          transform: scale(1.1);
+          filter: grayscale(0%);
+        }
+
+        .rp-cell-name {
+          font-family: 'Cormorant Garamond', serif;
+          font-size: clamp(20px, 2.2vw, 28px);
+          font-weight: 400;
+          color: var(--ink);
+          letter-spacing: -0.01em;
+          line-height: 1;
+          text-align: center;
+          transition: color 0.2s ease;
+        }
+
+        .rp-cell-hq {
+          font-family: 'Outfit', sans-serif;
+          font-size: 9px;
+          font-weight: 300;
+          color: transparent;
+          letter-spacing: 0.16em;
+          text-transform: uppercase;
+          transition: color 0.25s ease, transform 0.3s ease;
+          transform: translateY(4px);
+        }
+
+        .rp-cell:hover .rp-cell-hq {
+          color: var(--muted);
+          transform: translateY(0);
+        }
+
+        /* Footer */
+        .rp-footer {
+          margin-top: 36px;
+          display: flex;
+          align-items: center;
+          gap: 20px;
+        }
+
+        .rp-footer-dot {
+          width: 5px;
+          height: 5px;
+          border-radius: 50%;
+          background: var(--rule);
+          flex-shrink: 0;
+        }
+
+        .rp-footer-text {
+          font-family: 'Outfit', sans-serif;
+          font-size: 10px;
+          font-weight: 300;
+          letter-spacing: 0.16em;
+          text-transform: uppercase;
+          color: var(--muted);
+        }
+
+        .rp-footer-line {
+          flex: 1;
+          height: 1px;
+          background: var(--rule);
+        }
+
+        .rp-footer-year {
+          font-family: 'Cormorant Garamond', serif;
+          font-size: 13px;
+          font-style: italic;
+          color: var(--rule);
+        }
+
+        /* Staggered entrance animation */
+        @keyframes fadeUp {
+          from { opacity: 0; transform: translateY(16px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .rp-cell {
+          animation: fadeUp 0.5s ease both;
+        }
+
+        ${companies.map((_, i) => `.rp-cell:nth-child(${i + 1}) { animation-delay: ${i * 60}ms; }`).join('\n')}
+
+        @media (max-width: 640px) {
+          .rp-wrap { padding: 64px 24px; }
+          .rp-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+          .rp-stat { text-align: left; }
+          .rp-cell { padding: 22px 12px 20px; }
+        }
+      `}</style>
+
+      <div className="rp-wrap">
+        <div className="rp-inner">
+
+          <div className="rp-header">
+            <div className="rp-title-block">
+              <div className="rp-label">Where our talent lands</div>
+              <div className="rp-title">Recruitment <em>partners</em></div>
             </div>
-
-            {/* Heading */}
-            <h2
-              className="text-[#0f1f4b] font-bold leading-tight mb-6"
-              style={{
-                fontFamily: "'Georgia', 'Times New Roman', serif",
-                fontSize: "clamp(2rem, 3.5vw, 2.75rem)",
-              }}
-            >
-              Meet our students
-            </h2>
-
-            {/* Body */}
-            <p
-              className="text-[#444] leading-relaxed text-[0.97rem]"
-              style={{ fontFamily: "'Georgia', serif" }}
-            >
-              At IQS, each student is a story of motivation, dedication, and
-              success. Through their experiences, you&apos;ll be able to get a
-              more accurate view on the programmes, the subjects taught, and the
-              professional impact it has on students.
-            </p>
+            <div className="rp-stat">
+              <span className="rp-stat-num">12</span>
+              <span className="rp-stat-label">Partner companies</span>
+            </div>
           </div>
 
-          {/* Right: Scrollable cards */}
-          <div className="flex-1 min-w-0">
-            <div
-              ref={scrollRef}
-              onScroll={updateScrollState}
-              className="flex gap-4 overflow-x-auto scroll-smooth pb-2"
-              style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-            >
-              {students.map((s, index) => (
-                <div
-                  key={index}
-                  className="relative flex-shrink-0 w-[260px] h-[380px] rounded-2xl overflow-hidden group cursor-pointer"
-                >
-                  {/* Photo */}
-                  <img
-                    src={s.image}
-                    alt={s.name}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-
-                  {/* Gradient overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-
-                  {/* Name + programme */}
-                  <div className="absolute bottom-0 left-0 right-0 p-5">
-                    <p
-                      className="text-white font-semibold text-lg leading-tight mb-1"
-                      style={{ fontFamily: "'Georgia', serif" }}
+          <div className="rp-pyramid">
+            {rows.map((row, ri) => (
+              <div className="rp-row" key={ri}>
+                {row.map((c, ci) => {
+                  const globalIdx = rows.slice(0, ri).reduce((a, r) => a + r.length, 0) + ci;
+                  return (
+                    <div
+                      className="rp-cell"
+                      key={c.name}
+                      onMouseEnter={() => setHovered(c.name)}
+                      onMouseLeave={() => setHovered(null)}
                     >
-                      {s.name}
-                    </p>
-                    <p className="text-white/75 text-sm leading-snug">
-                      {s.programme}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Controls */}
-            <div className="flex items-center justify-between mt-7">
-              <a
-                href="#"
-                className="flex items-center gap-2 px-6 py-3 border border-[#1a1a3a] rounded-full text-[#1a1a3a] text-sm font-medium hover:bg-[#1a1a3a] hover:text-white transition-all duration-200"
-                style={{ fontFamily: "'Georgia', serif" }}
-              >
-                See more experiences
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="w-4 h-4"
-                >
-                  <path d="M5 12h14M12 5l7 7-7 7" />
-                </svg>
-              </a>
-
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => scroll("left")}
-                  disabled={!canScrollLeft}
-                  className={`w-10 h-10 rounded-full border flex items-center justify-center transition-all duration-200 ${
-                    canScrollLeft
-                      ? "border-[#1a1a3a] text-[#1a1a3a] hover:bg-[#1a1a3a] hover:text-white"
-                      : "border-[#ccc] text-[#ccc] cursor-not-allowed"
-                  }`}
-                  aria-label="Previous"
-                >
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="w-4 h-4"
-                  >
-                    <path d="M19 12H5M12 19l-7-7 7-7" />
-                  </svg>
-                </button>
-                <button
-                  onClick={() => scroll("right")}
-                  disabled={!canScrollRight}
-                  className={`w-10 h-10 rounded-full border flex items-center justify-center transition-all duration-200 ${
-                    canScrollRight
-                      ? "border-[#1a1a3a] text-[#1a1a3a] hover:bg-[#1a1a3a] hover:text-white"
-                      : "border-[#ccc] text-[#ccc] cursor-not-allowed"
-                  }`}
-                  aria-label="Next"
-                >
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="w-4 h-4"
-                  >
-                    <path d="M5 12h14M12 5l7 7-7 7" />
-                  </svg>
-                </button>
+                      <div
+                        className="rp-cell-bar"
+                        style={{ background: c.color }}
+                      />
+                      <span className="rp-cell-idx">{String(globalIdx + 1).padStart(2, "0")}</span>
+                      <img
+                        className="rp-cell-logo"
+                        src={`https://www.google.com/s2/favicons?domain=${c.domain}&sz=64`}
+                        alt={c.name}
+                        width={32}
+                        height={32}
+                      />
+                      <span className="rp-cell-name">{c.name}</span>
+                      <span className="rp-cell-hq">{c.hq}</span>
+                    </div>
+                  );
+                })}
               </div>
-            </div>
+            ))}
           </div>
+
+          <div className="rp-footer">
+            <div className="rp-footer-dot" />
+            <span className="rp-footer-text">Actively placing talent</span>
+            <div className="rp-footer-line" />
+            <span className="rp-footer-year">2024 — present</span>
+          </div>
+
         </div>
       </div>
     </section>
